@@ -3,6 +3,7 @@
 import DarkMode from "@/components/DarkMode";
 import Register from "@/components/Register";
 import Verify from "@/components/Verify";
+import Wallet from "@/components/Wallet";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -13,6 +14,7 @@ export default function Home() {
     <>
       <div className="flex items-center justify-center mt-4">
         <DarkMode />
+        <Wallet/>
       </div>
 
       {/* Buttons to toggle between Register and Verify */}
