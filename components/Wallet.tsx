@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
-import { Button } from './ui/button'
+import React, { useState } from "react";
+import { Button } from "./ui/button";
 import { ethers } from "ethers";
-import ABI from "./ABI.json"
+import ABI from "./ABI.json";
 
 interface WalletProps {
     saveState: (state: { provider: any; contract: any; account: string }) => void;
 }
 
 const Wallet = ({ saveState }: WalletProps) => {
-    const [connected, setConnected] = useState<boolean>(true);
-    const [account, setAccount] = useState("");
+    const [connected, setConnected] = useState(false); // Track connection status
+    const [account, setAccount] = useState<string | null>(null);
+
     const init = async () => {
         try {
             if (!window.ethereum) {
@@ -36,28 +37,29 @@ const Wallet = ({ saveState }: WalletProps) => {
                 signer // Signer connects the contract to the current account
             );
 
-            // console.log(contract);
-
             // Update state
-            setConnected(false); // Assuming this is part of your state logic
-            saveState({ provider: provider, contract: contract, account: account });
-
-            // console.log(provider);
-            // console.log(contract);
-            // console.log(account);
-            
-            // setAccount(account); // Update account state
-
+            setConnected(true); // Connection established
+            setAccount(account); // Set the account address
+            saveState({ provider, contract, account }); // Save contract-related state
         } catch (error) {
             console.error("Error connecting to MetaMask:", error);
             alert("Failed to connect to MetaMask");
         }
     };
-  return (
-    <div>
-          <Button className='w-32' onClick={init}>Connect to Wallet</Button>
-    </div>
-  )
-}
 
-export default Wallet
+    return (
+        <div>
+            {connected && account ? (
+                <Button className="w-64" disabled>
+                    Connected to: {account.slice(0, 6)}...{account.slice(-4)}
+                </Button>
+            ) : (
+                <Button className="w-32" onClick={init}>
+                    Connect to Wallet
+                </Button>
+            )}
+        </div>
+    );
+};
+
+export default Wallet;

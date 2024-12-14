@@ -14,29 +14,63 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 
-const Register = () => {
+
+interface WalletProps {
+    walletState: { provider: any | null; contract: any | null; account: string | null };
+}
+
+const Register = ({ walletState }: WalletProps) => {
     const [name, setName] = useState("");
     const [age, setAge] = useState<number | "">("");
     const [birthdate, setBirthdate] = useState<Date | null>(null);
     const [country, setCountry] = useState("");
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!name || !age || !birthdate || !country) {
             alert("Please fill in all fields.");
             return;
         }
 
-        const formattedDate = birthdate ? format(birthdate, "dd-MM-yyyy") : ""; // Format date for submission
+        try {
+            const { contract, account } = walletState;
 
-        // Prepare data for contract call
-        const data = {
-            name,
-            age: Number(age), // Ensure age is a number
-            birthdate: formattedDate,
-            country,
-        };
-        
-        //onRegister(data); // Pass data to parent component or contract call handler
+            if (!contract || !account) {
+                alert("Wallet is not connected. Please connect your wallet first.");
+                return;
+            }
+
+            const formattedDate = birthdate ? format(birthdate, "dd-MM-yyyy") : "";
+
+            // Prepare data for contract call
+            const registrationData = {
+                name,
+                age: Number(age), // Ensure age is a number
+                birthdate: formattedDate,
+                country,
+            };
+
+            console.log("Submitting Registration:", registrationData);
+
+            // Call the contract's register function
+            const transaction = await contract.register(
+                registrationData.name,
+                registrationData.age,
+                registrationData.birthdate,
+                registrationData.country,
+                { from: account }
+            );
+
+            console.log("Transaction:", transaction);
+
+            // Wait for the transaction to be mined
+            const receipt = await transaction.wait();
+            console.log("Transaction receipt:", receipt);
+
+            alert("Registration successful!");
+        } catch (error) {
+            console.error("Error during registration:", error);
+            alert("Failed to register. Please check the console for details.");
+        }
     };
 
     return (

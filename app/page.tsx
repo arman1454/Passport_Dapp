@@ -22,7 +22,7 @@ export default function Home() {
   }
   return (
     <>
-      <div className="flex items-center justify-center mt-4">
+      <div className="flex items-center justify-center mt-4 gap-16">
         <DarkMode />
         <Wallet saveState={saveState} />
       </div>
@@ -46,8 +46,8 @@ export default function Home() {
       </div>
 {/* Render Register or Verify based on activeTab */}
       <div className="flex items-center justify-center mt-8">
-        {activeTab === "register" && <Register />}
-        {activeTab === "verify" && <Verify />}
+        {activeTab === "register" && <Register walletState={state}/>}
+        {activeTab === "verify" && <Verify walletState = {state}/>}
       </div>
     </>
   );
