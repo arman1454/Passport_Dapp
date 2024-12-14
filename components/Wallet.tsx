@@ -32,7 +32,7 @@ const Wallet = ({ saveState }: WalletProps) => {
 
             // Create the contract instance
             const contract = new ethers.Contract(
-                "0x6a5C1689A344E3e307a10a3455e1A5F3E4A5801d", // Contract address
+                "0xed5204F14D46eb4D17656F409c977719071EcB66", // Contract address
                 ABI, // Contract ABI
                 signer // Signer connects the contract to the current account
             );
