@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
 import { Button } from './ui/button'
 import { ethers } from "ethers";
+import ABI from "./ABI.json"
 
-const Wallet = () => {
+interface WalletProps {
+    saveState: (state: { provider: any; contract: any; account: string }) => void;
+}
+
+const Wallet = ({ saveState }: WalletProps) => {
     const [connected, setConnected] = useState<boolean>(true);
     const [account, setAccount] = useState("");
     const init = async () => {
@@ -26,17 +31,22 @@ const Wallet = () => {
 
             // Create the contract instance
             const contract = new ethers.Contract(
-                "0xa3D40cDf17bc7fFE248B00CE59d5B11dd47321ca", // Contract address
+                "0x6a5C1689A344E3e307a10a3455e1A5F3E4A5801d", // Contract address
                 ABI, // Contract ABI
                 signer // Signer connects the contract to the current account
             );
 
-            console.log(contract);
+            // console.log(contract);
 
             // Update state
             setConnected(false); // Assuming this is part of your state logic
             saveState({ provider: provider, contract: contract, account: account });
-            setAccount(account); // Update account state
+
+            // console.log(provider);
+            // console.log(contract);
+            // console.log(account);
+            
+            // setAccount(account); // Update account state
 
         } catch (error) {
             console.error("Error connecting to MetaMask:", error);
@@ -45,7 +55,7 @@ const Wallet = () => {
     };
   return (
     <div>
-      <Button className='w-32' onClick={()=>}>Connect to Wallet</Button>
+          <Button className='w-32' onClick={init}>Connect to Wallet</Button>
     </div>
   )
 }
