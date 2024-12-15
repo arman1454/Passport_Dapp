@@ -7,22 +7,24 @@ interface WalletProps {
     saveState: (state: { provider: any; contract: any; account: string }) => void;
 }
 
+
 const Wallet = ({ saveState }: WalletProps) => {
     const [connected, setConnected] = useState(false); // Track connection status
     const [account, setAccount] = useState<string | null>(null);
 
     const init = async () => {
         try {
-            if (!window.ethereum) {
+            const ethereum = (window as any).ethereum;
+            if (!ethereum) {
                 alert("MetaMask is not installed");
                 return;
             }
 
             // Request account access
-            await window.ethereum.request({ method: "eth_requestAccounts" });
+            await ethereum.request({ method: "eth_requestAccounts" });
 
             // Create a provider
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const provider = new ethers.providers.Web3Provider(ethereum);
 
             // Get the signer
             const signer = provider.getSigner();
@@ -32,7 +34,7 @@ const Wallet = ({ saveState }: WalletProps) => {
 
             // Create the contract instance
             const contract = new ethers.Contract(
-                "0xed5204F14D46eb4D17656F409c977719071EcB66", // Contract address
+                "0xdBBed2e325D89C6e230f0faBBF05cC5D7e4299b6", // Contract address
                 ABI, // Contract ABI
                 signer // Signer connects the contract to the current account
             );
