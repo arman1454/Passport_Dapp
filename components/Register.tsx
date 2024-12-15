@@ -13,16 +13,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
+import { log } from "console";
 
 
 interface WalletProps {
-    walletState: { provider: any | null; contract: any | null; account: string | null };
+    walletState: { contract: any | null; account: string | null };
 }
 
 const Register = ({ walletState }: WalletProps) => {
     const [name, setName] = useState("");
     const [age, setAge] = useState<number | "">("");
-    const [birthdate, setBirthdate] = useState<Date | null>(null);
+    const [birthdate, setBirthdate] = useState<Date | undefined>(new Date());
     const [country, setCountry] = useState("");
 
     const handleSubmit = async () => {
@@ -50,14 +51,14 @@ const Register = ({ walletState }: WalletProps) => {
             };
 
             console.log("Submitting Registration:", registrationData);
-
+            console.log(account);
+            
             // Call the contract's register function
             const transaction = await contract.register(
                 registrationData.name,
                 registrationData.age,
                 registrationData.birthdate,
                 registrationData.country,
-                { from: account }
             );
 
             console.log("Transaction:", transaction);
@@ -67,6 +68,10 @@ const Register = ({ walletState }: WalletProps) => {
             console.log("Transaction receipt:", receipt);
 
             alert("Registration successful!");
+            setName("")
+            setAge("")
+            setBirthdate(new Date())
+            setCountry("")
         } catch (error) {
             console.error("Error during registration:", error);
             alert("Failed to register. Please check the console for details.");
@@ -125,11 +130,11 @@ const Register = ({ walletState }: WalletProps) => {
                                     <SelectValue placeholder="Select a country" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="usa">USA</SelectItem>
-                                    <SelectItem value="uk">UK</SelectItem>
-                                    <SelectItem value="canada">Canada</SelectItem>
-                                    <SelectItem value="india">India</SelectItem>
-                                    <SelectItem value="bangladesh">Bangladesh</SelectItem>
+                                    <SelectItem value="USA">USA</SelectItem>
+                                    <SelectItem value="UK">UK</SelectItem>
+                                    <SelectItem value="Canada">Canada</SelectItem>
+                                    <SelectItem value="India">India</SelectItem>
+                                    <SelectItem value="Bangladesh">Bangladesh</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>

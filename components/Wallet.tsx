@@ -34,7 +34,7 @@ const Wallet = ({ saveState }: WalletProps) => {
 
             // Create the contract instance
             const contract = new ethers.Contract(
-                "0xdBBed2e325D89C6e230f0faBBF05cC5D7e4299b6", // Contract address
+                "0x55D201F92CF82CEdA92dE6F33Bd9008d481dcB23", // Contract address
                 ABI, // Contract ABI
                 signer // Signer connects the contract to the current account
             );
@@ -52,8 +52,8 @@ const Wallet = ({ saveState }: WalletProps) => {
     return (
         <div>
             {connected && account ? (
-                <Button className="w-64" disabled>
-                    Connected to: {account.slice(0, 6)}...{account.slice(-4)}
+                <Button className="w-32" disabled>
+                    Connected 
                 </Button>
             ) : (
                 <Button className="w-32" onClick={init}>

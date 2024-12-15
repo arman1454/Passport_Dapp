@@ -11,11 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 interface WalletProps {
-    walletState: { provider: any | null; contract: any | null; account: string | null };
+    walletState: { contract: any | null; account: string | null };
 }
 
 const Verify = ({ walletState }: WalletProps) => {
-    const { provider, contract, account } = walletState;
+    const { contract, account } = walletState;
 
     const [address, setAddress] = useState<string>("");
     const [age, setAge] = useState<number | "">("");
@@ -29,7 +29,7 @@ const Verify = ({ walletState }: WalletProps) => {
     } | null>(null);
 
     const handleVerify = async () => {
-        if (!contract || !provider || !account) {
+        if (!contract || !account) {
             setError("Wallet is not connected or contract is not loaded.");
             return;
         }
@@ -60,9 +60,9 @@ const Verify = ({ walletState }: WalletProps) => {
             const errorMessage = err.data?.message || err.message;
 
             if (errorMessage.includes("Access denied")) {
-                setError("Access denied: You cannot view someone else's data.");
+                setError("You cannot view someone else's data.");
             } else if (errorMessage.includes("User not registered")) {
-                setError("User is not registered.");
+                setError("You are not registered.");
             } else if (errorMessage.includes("Age does not match")) {
                 setError("Age does not match the registered record.");
             } else {
